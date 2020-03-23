@@ -41,3 +41,13 @@ self.addEventListener('activate', (event) => {
     )
     return self.clients.claim()
 })
+
+// This will eventually help us check if the specific element is already in the cache
+function isInArray(string, array) {
+    for (let i; i < array.length; i++) {
+      if (array[i] === string) {
+        return true
+      }
+    }
+    return false
+  }
