@@ -1,0 +1,13 @@
+{
+    "name": "CMGT Showcase as a Progressive Web App",
+    "short_name": "Showcase",
+    "start_url": "/index.html",
+    "scope": ".",
+    "display": "standalone",
+    "orientation": "portrait-primary",
+    "background_color": "#fff",
+    "theme_color": "#3f51b5",
+    "description": "A simple CMGT showcase, implementing a lot of PWA techniques.",
+    "dir": "ltr",
+    "lang": "en-US"
+  }
