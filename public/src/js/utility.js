@@ -53,6 +53,7 @@ function clearSingleData(st, id) {
 }
 
 function createOfflineNotification() {
+  console.log('[Utility] Creating offline tag')
   let offlineArea = document.querySelector('#offline')
   let notificationWrapper = document.createElement('div')
   notificationWrapper.className = 'offline-tag'
@@ -60,4 +61,8 @@ function createOfflineNotification() {
   offlineText.textContent = "Offline"
   notificationWrapper.appendChild(offlineText)
   offlineArea.appendChild(notificationWrapper)
+}
+
+function clearOfflineNotification(){
+  let offlineArea = document.getElementById('offline-tag').remove()
 }

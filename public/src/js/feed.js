@@ -57,6 +57,16 @@ function updateUI(data) {
   }
 }
 
+self.addEventListener('offline', (event) => {
+  console.log('the network connection has been lost')
+  createOfflineNotification()
+})
+
+self.addEventListener('online', (event) => {
+  console.log('the network connection is established.')
+  clearOfflineNotification()
+})
+
 // call naar /projects
 let url = 'https://cmgt.hr.nl:8000/api/projects'
 let networkDataReceived = false
@@ -79,6 +89,9 @@ fetch(url)
   })
   .catch((err) => {
     console.log('[Feed.js] We have encountered an error...', err)
+    if (!navigator.onLine){
+      createOfflineNotification()
+    }
   })
 
 if ('indexedDB' in window) {
