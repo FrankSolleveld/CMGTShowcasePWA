@@ -17,7 +17,7 @@ let STATIC_FILES = [
     '/src/js/feed.js',
     '/src/js/idb.js',
     '/src/js/utility.js',
-    '/src/js/material.min.js',
+    '/src/js/material.min.js.map',
     '/src/css/styles.css',
     '/src/css/feed.css',
     '/src/images/favicons/',
@@ -69,7 +69,7 @@ self.addEventListener('fetch', (event) => {
         
         console.log('[Service Worker] Recognised /tags call. Will not store this in cache.')
         return 
-        
+
     }
     // Cache then network strategy
     let url = 'https://cmgt.hr.nl:8000/api/projects'

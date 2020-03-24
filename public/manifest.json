@@ -1,6 +1,6 @@
 {
     "name": "CMGT Showcase as a Progressive Web App",
-    "short_name": "Showcase",
+    "short_name": "CMGT Showcase",
     "start_url": "/index.html",
     "icons": [
       {
@@ -12,13 +12,19 @@
           "src": "/src/images/favicons/android-chrome-512x512.png",
           "sizes": "512x512",
           "type": "image/png"
+      },
+      {
+        "src": "src/images/favicons/mstile-144x144.png",
+        "sizes": "144x144",
+        "type": "image/png"
       }
+
   ],
     "scope": ".",
     "display": "standalone",
     "orientation": "portrait-primary",
     "background_color": "#fff",
-    "theme_color": "#3f51b5",
+    "theme_color": "#CC0133",
     "description": "A simple CMGT showcase, implementing a lot of PWA techniques.",
     "dir": "ltr",
     "lang": "en-US"

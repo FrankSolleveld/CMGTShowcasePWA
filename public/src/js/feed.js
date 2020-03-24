@@ -1,23 +1,7 @@
 let projectsArea = document.querySelector('#projects')
 let tagsArea = document.querySelector('#tags')
 let cmgtUrl = 'https://cmgt.hr.nl:8000/'
-// console.log('Start of Feed JS')
-
-// show PWA question
-if (deferredPrompt) {
-  deferredPrompt.prompt()
-
-  deferredPrompt.userChoice.then(function (choiceResult) {
-    console.log(choiceResult.outcome)
-
-    if (choiceResult.outcome === 'dismissed') {
-      console.log('User cancelled installation')
-    } else {
-      console.log('User added to home screen')
-    }
-  })
-  deferredPrompt = null
-}
+let downloadButton = document.getElementById('download')
 
 function clearCards() {
   while (projectsArea.hasChildNodes()) {
@@ -94,6 +78,21 @@ self.addEventListener('online', (event) => {
   console.log('the network connection is established.')
   clearOfflineNotification()
 })
+
+if(downloadButton) {
+  downloadButton.addEventListener('click', e => {
+    deferredPrompt.prompt()
+    deferredPrompt.userChoice
+      .then(choiceResult => {
+        if(choiceResult.outcome === 'accepted') {
+          console.log('user accepted A2HS prompt')
+        } else {
+          console.log('user dismissed A2HS prompt')
+        }
+        deferredPrompt = null
+      })
+    })
+}
 
 // call naar /projects
 let url = 'https://cmgt.hr.nl:8000/api/projects'
