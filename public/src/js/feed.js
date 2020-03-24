@@ -1,4 +1,5 @@
 let projectsArea = document.querySelector('#projects');
+let cmgtUrl = 'https://cmgt.hr.nl:8000/'
 
 // show PWA question
 if (deferredPrompt) {
@@ -27,7 +28,7 @@ function clearCards() {
     cardWrapper.className = 'projects-card mdl-card mdl-shadow--2dp';
     let cardTitle = document.createElement('div');
     cardTitle.className = 'mdl-card__title';
-    cardTitle.style.backgroundImage = 'url(' + data.headerImage + ')';
+    cardTitle.style.backgroundImage = 'url('+ cmgtUrl + data.headerImage + ')';
     cardTitle.style.backgroundSize = 'cover';
     cardWrapper.appendChild(cardTitle);
     let cardTitleTextElement = document.createElement('h2');
