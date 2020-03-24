@@ -53,11 +53,11 @@ function clearSingleData(st, id) {
 }
 
 function createOfflineNotification() {
-  let offlineArea = document.querySelector('#offline')
-  offlineArea.style.display = 'block'
+  let offlineArea = document.querySelector('.showcase')
+  offlineArea.textContent = "CMGT Showcase (Offline)"
 }
 
 function clearOfflineNotification(){
-  let offlineArea = document.querySelector('#offline')
-  offlineArea.style.display = 'none'
+  let offlineArea = document.querySelector('.showcase')
+  offlineArea.textContent = "CMGT Showcase"
 }

@@ -79,15 +79,23 @@ self.addEventListener('fetch', (event) => {
         event.respondWith(
             fetch(event.request)
                 .then((res) => {
-                    clearAllData('projects')
                     console.log('[Service Worker] Fetched something ....', event.request.url)
                     return caches.open(CACHE_DYNAMIC_NAME)
-                        .then(cache => {
-                            cache.put(event.request, res.clone());
-                        })
                         .then(() => {
-                            console.log('[Service Worker] Fetched projects from internet');
-                            return res;
+                            return res
+                        })
+                        .catch((err)=> {
+                            console.log('[Service Worker] Error occured while fetching from the internet, retrieving projects from DB.')
+                            if ('indexedDB' in window) {
+                                readAllData('projects')
+                                  .then((data) => {
+                                    // Wanneer er vanuit het netwerk is geladen, wordt dit niet uitgevoerd, wanneer dit niet zo is, wordt dit wel uitgevoerd. De gegevens worden dan uit IndexedDB gehaald.
+                                    if (!networkDataReceived) {
+                                      updateUI(data)
+                                      console.log('[Feed.js] Data has been retrieved out of IndexDB.')
+                                    }
+                                  })
+                              }
                         })
                 })
         )

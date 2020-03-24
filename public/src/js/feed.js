@@ -51,7 +51,7 @@ function createCard(data) {
 }
 
 function createTagsList(data){
-  
+
 }
 
 function updateUI(data) {
@@ -80,6 +80,7 @@ fetch(url)
     return res.json()
   })
   .then((data) => {
+    clearAllData('projects')
     let projectsData = data.projects
     for (let i = 0; i < projectsData.length; i++) {
       writeData('projects', projectsData[i])
@@ -95,24 +96,28 @@ fetch(url)
     console.log('[Feed.js] We have encountered an error...', err)
     if (!navigator.onLine){
       createOfflineNotification()
+      if ('indexedDB' in window) {
+        readAllData('projects')
+          .then((data) => {
+            // Wanneer er vanuit het netwerk is geladen, wordt dit niet uitgevoerd, wanneer dit niet zo is, wordt dit wel uitgevoerd. De gegevens worden dan uit IndexedDB gehaald.
+            if (!networkDataReceived) {
+              updateUI(data)
+              console.log('[Feed.js] Data has been retrieved out of IndexDB.')
+            }
+          })
+      }
     }
   })
 
+  // TODO: Finish tag script
   fetch('https://cmgt.hr.nl:8000/api/projects/tags')
     .then((res) => {
       return res.json()
     })
     .then((data) => {
       let tagData = data.tags
+      console.log(tagData)
     })
-
-if ('indexedDB' in window) {
-  readAllData('projects')
-    .then((data) => {
-      // Wanneer er vanuit het netwerk is geladen, wordt dit niet uitgevoerd, wanneer dit niet zo is, wordt dit wel uitgevoerd. De gegevens worden dan uit IndexedDB gehaald.
-      if (!networkDataReceived) {
-        updateUI(data)
-        console.log('[Feed.js] Data has been retrieved out of IndexDB.')
-      }
+    .catch((err) => {
+      console.log('[Feed.js] Encountered an error while fetching tags', err)
     })
-}
