@@ -4,11 +4,6 @@ let dbPromise = idb.open('projects-store', 1, (db) => {
         keyPath: '_id'
       })
     }
-    if (!db.objectStoreNames.contains('sync-projects')) {
-      db.createObjectStore('sync-projects', {
-        keyPath: '_id'
-      })
-    }
   })
 
   function writeData(st, data) {
@@ -16,6 +11,7 @@ let dbPromise = idb.open('projects-store', 1, (db) => {
     .then((db) => {
       let transaction = db.transaction(st, 'readwrite')
       let store = transaction.objectStore(st)
+      console.log('[Utility] Writing data into the store', data)
       store.put(data)
       return transaction.complete
     })
@@ -28,6 +24,9 @@ let dbPromise = idb.open('projects-store', 1, (db) => {
             let store = tx.objectStore(st)
             return store.getAll()
         })
+        .catch((err) => {
+          console.log('[Utility] Error: ', err)
+        })
   }
 
   function clearAllData(st){
@@ -36,6 +35,7 @@ let dbPromise = idb.open('projects-store', 1, (db) => {
             let tx = db.transaction(st, 'readwrite')
             let store = tx.objectStore(st)
             store.clear()
+            console.log('[Utility] Store cleared.')
             return tx.complete
         })
   }
@@ -51,19 +51,4 @@ let dbPromise = idb.open('projects-store', 1, (db) => {
         .then(() => {
             console.log("[Utility] Item " + id + " deleted")
         })
-  }
-
-  function urlBase64ToUint8Array(base64String) {
-    var padding = '='.repeat((4 - base64String.length % 4) % 4);
-    var base64 = (base64String + padding)
-      .replace(/\-/g, '+')
-      .replace(/_/g, '/');
-  
-    var rawData = window.atob(base64);
-    var outputArray = new Uint8Array(rawData.length);
-  
-    for (var i = 0; i < rawData.length; ++i) {
-      outputArray[i] = rawData.charCodeAt(i);
-    }
-    return outputArray;
   }

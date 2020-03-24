@@ -6,17 +6,19 @@ created by: Frank Solleveld
 importScripts('/src/js/idb.js')
 importScripts('/src/js/utility.js')
 
-let CACHE_STATIC_NAME = 'static-v4'
+let CACHE_STATIC_NAME = 'static-v8'
 let CACHE_DYNAMIC_NAME = 'dynamic-v1'
 
 let STATIC_FILES = [
     '/',
     '/index.html',
     '/src/js/app.js',
+    '/src/js/feed.js',
     '/src/js/idb.js',
     '/src/js/utility.js',
     '/src/js/material.min.js',
-    '/src/css/styles.css'
+    '/src/css/styles.css',
+    '/src/css/feed.css'
 ]
 
 self.addEventListener('install', (event) => {
@@ -59,26 +61,26 @@ function isInArray(string, array) {
   }
 
   self.addEventListener('fetch', (event) => {
+      // Network only tag fetching
+      if(event.request.url === '/project/tags'){
+          console.log('[Service Worker] Fetching tags from the internet...', event.request.url)
+          return event.respondWith(fetch(event.request))
+      }
       // Cache then network strategy
-      console.log('[Service Worker] Fetching something ....', event);
-      let url = 'https://cmgt.hr.nl:8000/api/projects/'
-      if (event.request.url.indexOf(url) > -1){
+      let url = 'https://cmgt.hr.nl:8000/api/projects'
+      if (event.request.url === url){
           event.respondWith(
               fetch(event.request)
                 .then((res) => {
-                    let clonedRes = res.clone()
-                    console.log(res)
-                    // clearing sorage before repopulating
-                    clearAllData('projects')
+                    console.log('[Service Worker] Fetched something ....', event.request.url)
+                    return caches.open(CACHE_DYNAMIC_NAME)
+                        .then(cache => {
+                            cache.put(event.request, res.clone());
+                        })
                         .then(() => {
-                            return clonedRes.json()
+                            console.log('[Service Worker] Fetched projects from internet');
+                            return res;
                         })
-                        .then((data) => {
-                            for (let key in data){
-                                writeData('projects', data[key])
-                            }
-                        })
-                        return res
                 })
           )
       } else if (isInArray(event.request.url, STATIC_FILES)){

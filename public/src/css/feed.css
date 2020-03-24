@@ -1,0 +1,32 @@
+.projects-card.mdl-card {
+    margin: 10px auto;
+    /* width: 270px; */
+    width: 80%
+  }
+  
+  @media (min-width: 600px){
+    .projects-card.mdl-card {
+      width: 60%;
+    }
+  }
+  
+  @media (min-width: 1000px){
+    .projects-card.mdl-card {
+      width: 45%;
+    }
+  }
+  .projects-card .mdl-card__title {
+    height: 140px;
+  }
+  
+  @media (min-height: 700px){
+    .projects-card .mdl-card__title {
+      height: 160px;
+    }
+  }
+  
+  @media (min-height: 1000px){
+    .projects-card .mdl-card__title {
+      height: 200px;
+    }
+  }
