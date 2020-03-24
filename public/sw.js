@@ -12,6 +12,7 @@ let CACHE_DYNAMIC_NAME = 'dynamic-v1'
 let STATIC_FILES = [
     '/',
     '/index.html',
+    '/offline.html',
     '/src/js/app.js',
     '/src/js/feed.js',
     '/src/js/idb.js',
@@ -64,7 +65,11 @@ self.addEventListener('fetch', (event) => {
     // Network only tag fetching
     if (event.request.url === '/project/tags') {
         console.log('[Service Worker] Fetching tags from the internet...', event.request.url)
-        return event.respondWith(fetch(event.request))
+        return event.respondWith(
+            fetch(event.request).catch((err) => {
+                console.log('[Service Worker] Tags could not be retrieved', err)
+            })
+        )
     }
     // Cache then network strategy
     let url = 'https://cmgt.hr.nl:8000/api/projects'
