@@ -68,6 +68,7 @@ self.addEventListener('fetch', (event) => {
     if (event.request.url === 'https://cmgt.hr.nl:8000/api/projects/tags') {
         
         console.log('[Service Worker] Recognised /tags call. Will not store this in cache.')
+        return 
         
     }
     // Cache then network strategy

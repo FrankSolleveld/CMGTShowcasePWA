@@ -1,22 +1,22 @@
-let projectsArea = document.querySelector('#projects');
-let tagsArea = document.querySelector('#tags');
+let projectsArea = document.querySelector('#projects')
+let tagsArea = document.querySelector('#tags')
 let cmgtUrl = 'https://cmgt.hr.nl:8000/'
 // console.log('Start of Feed JS')
 
 // show PWA question
 if (deferredPrompt) {
-  deferredPrompt.prompt();
+  deferredPrompt.prompt()
 
   deferredPrompt.userChoice.then(function (choiceResult) {
-    console.log(choiceResult.outcome);
+    console.log(choiceResult.outcome)
 
     if (choiceResult.outcome === 'dismissed') {
-      console.log('User cancelled installation');
+      console.log('User cancelled installation')
     } else {
-      console.log('User added to home screen');
+      console.log('User added to home screen')
     }
-  });
-  deferredPrompt = null;
+  })
+  deferredPrompt = null
 }
 
 function clearCards() {
@@ -26,47 +26,55 @@ function clearCards() {
 }
 
 function createCard(data) {
-  let cardWrapper = document.createElement('div');
-  cardWrapper.className = 'projects-card mdl-card mdl-shadow--2dp';
-  let cardTitle = document.createElement('div');
-  cardTitle.className = 'mdl-card__title';
-  cardTitle.style.backgroundImage = 'url(' + cmgtUrl + data.headerImage + ')';
-  cardTitle.style.backgroundSize = 'cover';
-  cardWrapper.appendChild(cardTitle);
-  let cardTitleTextElement = document.createElement('h2');
+  let cardWrapper = document.createElement('div')
+  cardWrapper.className = 'projects-card mdl-card mdl-shadow--2dp'
+
+  let cardTitle = document.createElement('div')
+  cardTitle.className = 'mdl-card__title'
+  cardTitle.style.backgroundImage = 'url(' + cmgtUrl + data.headerImage + ')'
+  cardTitle.style.backgroundSize = 'cover'
+  cardWrapper.appendChild(cardTitle)
+
+  let cardTitleTextElement = document.createElement('h2')
   cardTitleTextElement.style.color = 'white'
-  cardTitleTextElement.className = 'mdl-card__title-text';
-  cardTitleTextElement.textContent = data.title;
-  cardTitle.appendChild(cardTitleTextElement);
-  let cardSupportingText = document.createElement('div');
-  cardSupportingText.className = 'mdl-card__supporting-text';
-  cardSupportingText.textContent = data.author;
-  cardSupportingText.style.textAlign = 'center';
-  let cardTagTextElement = document.createElement('p');
+  cardTitleTextElement.className = 'mdl-card__title-text'
+  cardTitleTextElement.textContent = data.title
+  cardTitle.appendChild(cardTitleTextElement)
+
+  let cardSupportingText = document.createElement('div')
+  cardSupportingText.className = 'mdl-card__supporting-text support'
+  cardSupportingText.textContent = data.author
+  cardSupportingText.style.textAlign = 'center'
+
+  let cardDescription = document.createElement('p')
+  cardDescription.style.color = 'black'
+  cardDescription.style.fontSize = '18px'
+  cardDescription.className = 'mdl-card__title-text'
+  cardDescription.textContent = data.description
+  cardSupportingText.appendChild(cardDescription)
+
+  let cardTagTextElement = document.createElement('p')
   cardTagTextElement.style.color = 'black'
   cardTagTextElement.style.fontSize = '18px'
-  cardTagTextElement.className = 'mdl-card__title-text';
-  cardTagTextElement.textContent = "Tags: " + data.tags;
-  cardSupportingText.appendChild(cardTagTextElement);
-  // let cardSaveButton = document.createElement('button')
-  // cardSaveButton.textContent = 'Save'
-  // cardSaveButton.addEventListener('click', onSaveButtonClicked)
-  // cardSupportingText.appendChild(cardSaveButton)
-  cardWrapper.appendChild(cardSupportingText);
-  componentHandler.upgradeElement(cardWrapper);
-  projectsArea.appendChild(cardWrapper);
+  cardTagTextElement.className = 'mdl-card__title-text'
+  cardTagTextElement.textContent = "Tags: " + data.tags
+  cardSupportingText.appendChild(cardTagTextElement)
+  
+  cardWrapper.appendChild(cardSupportingText)
+  componentHandler.upgradeElement(cardWrapper)
+  projectsArea.appendChild(cardWrapper)
 }
 
 function createTagsList(tag){
-  console.log('Tag: ' + tag)
-  let listItemElement = document.createElement('li')
-  listItemElement.className = 'mdc-list-item'
+
+  let listItemElement = document.createElement('p')
+  listItemElement.className = 'mdc-list-item mdc-layout-grid__cell--span-3'
   let  itemTextElement = document.createElement('span')
   itemTextElement.className = 'mdc-list-item__text'
   itemTextElement.textContent = tag
 
   listItemElement.appendChild(itemTextElement)
-console.log(tagsArea)
+
   tagsArea.appendChild(listItemElement)
 }
 
