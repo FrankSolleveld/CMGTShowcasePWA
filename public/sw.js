@@ -35,17 +35,17 @@ self.addEventListener('install', (event) => {
 
 self.addEventListener('activate', (event) => {
     console.log('[Service Worker] Activating service worker.', event)
-     // Writing cleanup code
+    // Writing cleanup code
     event.waitUntil(
         caches.keys()
-        .then((keyList) => {
-            return Promise.all(keyList.map((key) => {
-                if (key !== CACHE_STATIC_NAME && key !== CACHE_DYNAMIC_NAME){
-                    console.log('[Service Worker] Removing old cache: ' + key)
-                    caches.delete(key)
-                }
-            }))
-        })
+            .then((keyList) => {
+                return Promise.all(keyList.map((key) => {
+                    if (key !== CACHE_STATIC_NAME && key !== CACHE_DYNAMIC_NAME) {
+                        console.log('[Service Worker] Removing old cache: ' + key)
+                        caches.delete(key)
+                    }
+                }))
+            })
     )
     return self.clients.claim()
 })
@@ -53,25 +53,26 @@ self.addEventListener('activate', (event) => {
 // This will eventually help us check if the specific element is already in the cache
 function isInArray(string, array) {
     for (let i; i < array.length; i++) {
-      if (array[i] === string) {
-        return true
-      }
+        if (array[i] === string) {
+            return true
+        }
     }
     return false
-  }
+}
 
-  self.addEventListener('fetch', (event) => {
-      // Network only tag fetching
-      if(event.request.url === '/project/tags'){
-          console.log('[Service Worker] Fetching tags from the internet...', event.request.url)
-          return event.respondWith(fetch(event.request))
-      }
-      // Cache then network strategy
-      let url = 'https://cmgt.hr.nl:8000/api/projects'
-      if (event.request.url === url){
-          event.respondWith(
-              fetch(event.request)
+self.addEventListener('fetch', (event) => {
+    // Network only tag fetching
+    if (event.request.url === '/project/tags') {
+        console.log('[Service Worker] Fetching tags from the internet...', event.request.url)
+        return event.respondWith(fetch(event.request))
+    }
+    // Cache then network strategy
+    let url = 'https://cmgt.hr.nl:8000/api/projects'
+    if (event.request.url === url) {
+        event.respondWith(
+            fetch(event.request)
                 .then((res) => {
+                    clearAllData('projects')
                     console.log('[Service Worker] Fetched something ....', event.request.url)
                     return caches.open(CACHE_DYNAMIC_NAME)
                         .then(cache => {
@@ -82,21 +83,21 @@ function isInArray(string, array) {
                             return res;
                         })
                 })
-          )
-      } else if (isInArray(event.request.url, STATIC_FILES)){
-          event.respondWith(
-              caches.match(event.request)
-          )
-      } else {
-          // Cache with network fallback
-          event.respondWith(
-              caches.match(event.request)
+        )
+    } else if (isInArray(event.request.url, STATIC_FILES)) {
+        event.respondWith(
+            caches.match(event.request)
+        )
+    } else {
+        // Cache with network fallback
+        event.respondWith(
+            caches.match(event.request)
                 .then((response) => {
                     if (response) {
                         return response
                     } else {
                         return fetch(event.request)
-                            .then((res) => { 
+                            .then((res) => {
                                 // response from srv
                                 return caches.open(CACHE_DYNAMIC_NAME)
                                     .then((cache) => {
@@ -107,13 +108,13 @@ function isInArray(string, array) {
                             .catch((err) => {
                                 return caches.open(CACHE_STATIC_NAME)
                                     .then((cache) => {
-                                        if(event.request.headers.get('accept').includes('text/html')) {
+                                        if (event.request.headers.get('accept').includes('text/html')) {
                                             return cache.match('/offline.html')
                                         }
                                     })
                             })
                     }
                 })
-          )
-      }
-  })
+        )
+    }
+})
