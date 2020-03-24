@@ -18,7 +18,6 @@ let STATIC_FILES = [
     '/src/js/idb.js',
     '/src/js/utility.js',
     '/src/js/material.min.js.map',
-    '/src/css/styles.css',
     '/src/css/feed.css',
     '/src/images/favicons/',
     '/manifest.json'

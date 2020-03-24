@@ -2,6 +2,7 @@ let projectsArea = document.querySelector('#projects')
 let tagsArea = document.querySelector('#tags')
 let cmgtUrl = 'https://cmgt.hr.nl:8000/'
 let downloadButton = document.getElementById('download')
+let caption = document.getElementById('caption')
 
 function clearCards() {
   while (projectsArea.hasChildNodes()) {
@@ -43,17 +44,17 @@ function createCard(data) {
   cardTagTextElement.className = 'mdl-card__title-text'
   cardTagTextElement.textContent = "Tags: " + data.tags
   cardSupportingText.appendChild(cardTagTextElement)
-  
+
   cardWrapper.appendChild(cardSupportingText)
   componentHandler.upgradeElement(cardWrapper)
   projectsArea.appendChild(cardWrapper)
 }
 
-function createTagsList(tag){
-
+function createTagsList(tag) {
+  caption.style.display = 'block'
   let listItemElement = document.createElement('p')
   listItemElement.className = 'mdc-list-item mdc-layout-grid__cell--span-3'
-  let  itemTextElement = document.createElement('span')
+  let itemTextElement = document.createElement('span')
   itemTextElement.className = 'mdc-list-item__text'
   itemTextElement.textContent = tag
 
@@ -71,6 +72,8 @@ function updateUI(data) {
 
 self.addEventListener('offline', (event) => {
   console.log('the network connection has been lost')
+  caption.style.display = 'none'
+  tagsArea.style.display = 'none'
   createOfflineNotification()
 })
 
@@ -79,19 +82,19 @@ self.addEventListener('online', (event) => {
   clearOfflineNotification()
 })
 
-if(downloadButton) {
+if (downloadButton) {
   downloadButton.addEventListener('click', e => {
     deferredPrompt.prompt()
     deferredPrompt.userChoice
       .then(choiceResult => {
-        if(choiceResult.outcome === 'accepted') {
-          console.log('user accepted A2HS prompt')
+        if (choiceResult.outcome === 'accepted') {
+          console.log('User installed.')
         } else {
-          console.log('user dismissed A2HS prompt')
+          console.log('user dismissed')
         }
         deferredPrompt = null
       })
-    })
+  })
 }
 
 // call naar /projects
@@ -117,7 +120,7 @@ fetch(url)
   })
   .catch((err) => {
     console.log('[Feed.js] We have encountered an error...', err)
-    if (!navigator.onLine){
+    if (!navigator.onLine) {
       createOfflineNotification()
       if ('indexedDB' in window) {
         readAllData('projects')
@@ -132,17 +135,17 @@ fetch(url)
     }
   })
 
-  // TODO: Finish tag script
-  fetch('https://cmgt.hr.nl:8000/api/projects/tags')
-    .then((res) => {
-      return res.json()
-    })
-    .then((data) => {
-      let tagData = data.tags
-      for (let i = 0; i < tagData.length; i++){
-        createTagsList(tagData[i])
-      }
-    })
-    .catch((err) => {
-      console.log('[Feed.js] Encountered an error while fetching tags', err)
-    })
+// TODO: Finish tag script
+fetch('https://cmgt.hr.nl:8000/api/projects/tags')
+  .then((res) => {
+    return res.json()
+  })
+  .then((data) => {
+    let tagData = data.tags
+    for (let i = 0; i < tagData.length; i++) {
+      createTagsList(tagData[i])
+    }
+  })
+  .catch((err) => {
+    console.log('[Feed.js] Encountered an error while fetching tags', err)
+  })
