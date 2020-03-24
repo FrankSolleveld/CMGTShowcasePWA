@@ -50,6 +50,10 @@ function createCard(data) {
   projectsArea.appendChild(cardWrapper);
 }
 
+function createTagsList(data){
+  
+}
+
 function updateUI(data) {
   clearCards()
   for (let i = 0; i < data.length; i++) {
@@ -93,6 +97,14 @@ fetch(url)
       createOfflineNotification()
     }
   })
+
+  fetch('https://cmgt.hr.nl:8000/api/projects/tags')
+    .then((res) => {
+      return res.json()
+    })
+    .then((data) => {
+      let tagData = data.tags
+    })
 
 if ('indexedDB' in window) {
   readAllData('projects')

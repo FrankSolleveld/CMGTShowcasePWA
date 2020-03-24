@@ -20,7 +20,8 @@ let STATIC_FILES = [
     '/src/js/material.min.js',
     '/src/css/styles.css',
     '/src/css/feed.css',
-    '/src/images/favicons/'
+    '/src/images/favicons/',
+    '/manifest.json'
 ]
 
 self.addEventListener('install', (event) => {
