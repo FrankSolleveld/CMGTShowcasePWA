@@ -1,4 +1,5 @@
 let projectsArea = document.querySelector('#projects');
+let tagsArea = document.querySelector('#tags');
 let cmgtUrl = 'https://cmgt.hr.nl:8000/'
 // console.log('Start of Feed JS')
 
@@ -41,6 +42,12 @@ function createCard(data) {
   cardSupportingText.className = 'mdl-card__supporting-text';
   cardSupportingText.textContent = data.author;
   cardSupportingText.style.textAlign = 'center';
+  let cardTagTextElement = document.createElement('p');
+  cardTagTextElement.style.color = 'black'
+  cardTagTextElement.style.fontSize = '18px'
+  cardTagTextElement.className = 'mdl-card__title-text';
+  cardTagTextElement.textContent = "Tags: " + data.tags;
+  cardSupportingText.appendChild(cardTagTextElement);
   // let cardSaveButton = document.createElement('button')
   // cardSaveButton.textContent = 'Save'
   // cardSaveButton.addEventListener('click', onSaveButtonClicked)
@@ -50,8 +57,17 @@ function createCard(data) {
   projectsArea.appendChild(cardWrapper);
 }
 
-function createTagsList(data){
+function createTagsList(tag){
+  console.log('Tag: ' + tag)
+  let listItemElement = document.createElement('li')
+  listItemElement.className = 'mdc-list-item'
+  let  itemTextElement = document.createElement('span')
+  itemTextElement.className = 'mdc-list-item__text'
+  itemTextElement.textContent = tag
 
+  listItemElement.appendChild(itemTextElement)
+console.log(tagsArea)
+  tagsArea.appendChild(listItemElement)
 }
 
 function updateUI(data) {
@@ -116,7 +132,9 @@ fetch(url)
     })
     .then((data) => {
       let tagData = data.tags
-      console.log(tagData)
+      for (let i = 0; i < tagData.length; i++){
+        createTagsList(tagData[i])
+      }
     })
     .catch((err) => {
       console.log('[Feed.js] Encountered an error while fetching tags', err)

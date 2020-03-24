@@ -6,7 +6,7 @@ created by: Frank Solleveld
 importScripts('/src/js/idb.js')
 importScripts('/src/js/utility.js')
 
-let CACHE_STATIC_NAME = 'static-v8'
+let CACHE_STATIC_NAME = 'static-v9'
 let CACHE_DYNAMIC_NAME = 'dynamic-v1'
 
 let STATIC_FILES = [
@@ -65,13 +65,10 @@ function isInArray(string, array) {
 
 self.addEventListener('fetch', (event) => {
     // Network only tag fetching
-    if (event.request.url === '/project/tags') {
-        console.log('[Service Worker] Fetching tags from the internet...', event.request.url)
-        return event.respondWith(
-            fetch(event.request).catch((err) => {
-                console.log('[Service Worker] Tags could not be retrieved', err)
-            })
-        )
+    if (event.request.url === 'https://cmgt.hr.nl:8000/api/projects/tags') {
+        
+        console.log('[Service Worker] Recognised /tags call. Will not store this in cache.')
+        
     }
     // Cache then network strategy
     let url = 'https://cmgt.hr.nl:8000/api/projects'
