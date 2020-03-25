@@ -6,7 +6,7 @@ created by: Frank Solleveld
 importScripts('/src/js/idb.js')
 importScripts('/src/js/utility.js')
 
-let CACHE_STATIC_NAME = 'static-v9'
+let CACHE_STATIC_NAME = 'static-v10'
 let CACHE_DYNAMIC_NAME = 'dynamic-v1'
 
 let STATIC_FILES = [
@@ -17,10 +17,9 @@ let STATIC_FILES = [
     '/src/js/feed.js',
     '/src/js/idb.js',
     '/src/js/utility.js',
-    '/src/js/material.min.js.map',
+    '/src/js/material.min.js',
     '/src/css/feed.css',
-    '/src/images/favicons/',
-    '/manifest.json'
+    '/src/images/favicons/'
 ]
 
 self.addEventListener('install', (event) => {
@@ -120,6 +119,7 @@ self.addEventListener('fetch', (event) => {
                             .catch((err) => {
                                 return caches.open(CACHE_STATIC_NAME)
                                     .then((cache) => {
+                                        console.log('Navigating towards offline.html.')
                                         if (event.request.headers.get('accept').includes('text/html')) {
                                             return cache.match('/offline.html')
                                         }

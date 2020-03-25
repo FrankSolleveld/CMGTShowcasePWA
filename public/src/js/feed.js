@@ -147,5 +147,6 @@ fetch('https://cmgt.hr.nl:8000/api/projects/tags')
     }
   })
   .catch((err) => {
+    caption.style.display = 'none'
     console.log('[Feed.js] Encountered an error while fetching tags', err)
   })
